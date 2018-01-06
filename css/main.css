@@ -1,6 +1,7 @@
-.main-container {
+.main-container, footer {
     margin: 0 auto;
     width: 20rem;
+    margin-top: 5rem;
 }
 
 .layer-calculator {
@@ -32,4 +33,21 @@
 
 .page-header {
     font-weight: bolder;
+}
+
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+footer a {
+    color: rgba(0,0,0,.5);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+footer a:hover {
+    text-decoration: none;
+    color: antiquewhite;
 }
