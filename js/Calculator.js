@@ -1,5 +1,5 @@
 /**
- * @author Mamadou korka Diallo - korka25@live.com
+ * @author Mamadou korka Diallo
  * @version 0.1
  * @license MIT
  * @description A calculator class to build all the basic and advance calculations

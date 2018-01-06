@@ -1,3 +1,9 @@
+/**
+ * @author Mamadou korka Diallo
+ * @version 0.1
+ * @description Building a calculator with Vanilla Javascript from basic to advance
+ */
+
 const calculator = new Calculator();
 const ui = new UI();
 let numbers = document.querySelectorAll('.numbers');
@@ -11,10 +17,10 @@ loadAllEvents();
 
 function loadAllEvents() {
     // Switch on
-    document.getElementById('turn-on').addEventListener('click',() => ui.turnOn());
+    document.getElementById('turn-on').addEventListener('click', () => ui.turnOn());
 
     // Switch off
-    document.getElementById('turn-off').addEventListener('click',() => {
+    document.getElementById('turn-off').addEventListener('click', () => {
         ui.turnOff();
         // Delete all entered operations
         calculator.reset();
@@ -24,15 +30,15 @@ function loadAllEvents() {
 
     // Grab numbers
     numbers.forEach(number => {
-        if(number.innerText === "=") {
-            number.addEventListener('click',getResult);
+        if (number.innerText === "=") {
+            number.addEventListener('click', getResult);
         }
-        number.addEventListener('click',getNumbers);
+        number.addEventListener('click', getNumbers);
     });
 }
 
 function getNumbers(e) {
-    if(ui.status()) {
+    if (ui.status()) {
         calculator.setOperations(e.target.innerText);
         ui.render(calculator.getOperations());
     }
