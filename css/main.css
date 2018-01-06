@@ -51,3 +51,9 @@ footer a:hover {
     text-decoration: none;
     color: antiquewhite;
 }
+
+@media(max-width:680px) {
+    .main-container {
+        margin-top: 0;
+    }
+}
