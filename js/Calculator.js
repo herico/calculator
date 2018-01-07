@@ -62,6 +62,10 @@ class Calculator {
      * @param {*} expression 
      */
     evaluateMathExpression() {
+        // If there is no operations to evaluate then don't do anything
+        if(this.operations === "") {
+            return;
+        }
         this.operations = "" + eval(this.operations);
         this.operator = true;
     }
