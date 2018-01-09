@@ -126,7 +126,9 @@ class Calculator {
             this.isDotCharHasBeenUsedInThisNumber = false;
         } else if(this._isLastCharNotANumber()) {
             this.expression = this.expression.substr(0,this.expression.length - 3);
-            this.isDotCharHasBeenUsedInThisNumber = !this.isDotCharHasBeenUsedInThisNumber ? true:this.isDotCharHasBeenUsedInThisNumber;
+            if(this._isThereADot()) {
+             this.isDotCharHasBeenUsedInThisNumber = !this.isDotCharHasBeenUsedInThisNumber ? true:this.isDotCharHasBeenUsedInThisNumber;
+            }
         }
     }
 
@@ -194,6 +196,10 @@ class Calculator {
             }
         }
         return false;
+    }
+
+    _isThereADot() {
+        return (this.expression.indexOf(".") >= 0) ? true:false;
     }
 
 }
