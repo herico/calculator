@@ -3,8 +3,7 @@ class UI {
         this.result = document.getElementById('calculator-results');
         this.turningOn = document.getElementById('turn-on');
         this.turningOff = document.getElementById('turn-off');
-        this.isOn = false;
-        this.buttons = document.querySelectorAll('.numbers');
+        this.buttons = document.querySelectorAll('.numbers, #delete, #reset');
     }
 
     render(value) {
@@ -17,7 +16,6 @@ class UI {
         this.turningOff.classList.remove('on');
         this.result.removeAttribute("placeholder");
         this.switchStateOfButtons(true);
-        this.isOn = false;
         this.turningOn.disabled = false;
         this.turningOff.disabled = true;
     }
@@ -29,11 +27,6 @@ class UI {
         this.switchStateOfButtons(false);
         this.turningOn.disabled = true;
         this.turningOff.disabled = false;
-        this.isOn = true;
-    }
-
-    status() {
-        return this.isOn;
     }
 
     reset() {

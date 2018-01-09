@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
         crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
@@ -18,11 +19,13 @@
                 <h1 class="page-header display-4 text-muted">Calculator</h1>
                 <div class="card well card-body layer-calculator">
                     <div class="results">
-                        <input type="text" id="calculator-results">
+                        <input type="text" id="calculator-results" readonly>
                     </div>
                     <div class="layer-one">
                         <button class="btn btn-secondary btn-xs controls" id="turn-on">On</button>
                         <button class="btn btn-secondary btn-xs controls" id="turn-off">Off</button>
+                        <button class="btn btn-secondary btn-xs controls" id="reset">C</button>
+                        <button class="btn btn-secondary btn-xs controls" id="delete"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
                     </div>
                     <div class="layer-two">
                         <button class="btn btn-secondary btn-xs numbers">9</button>

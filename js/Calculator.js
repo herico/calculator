@@ -6,9 +6,9 @@
  */
 class Calculator {
     constructor() {
-        this.operations = "";
-        this.result = 0;
-        this.operator = false;
+        this.expression = "";
+        this.isDotCharHasBeenUsedInThisNumber = false;
+        this.isEqualOperatorHasBeenUsed = false;
     }
     /**
      * Make and addition of two numbers and return the result
@@ -62,58 +62,132 @@ class Calculator {
      * @param {*} expression 
      */
     evaluateMathExpression() {
-        // If there is no operations to evaluate then don't do anything
-        if(this.operations === "") {
-            return;
-        }
-        this.operations = "" + eval(this.operations);
-        this.operator = true;
+       this.expression = eval(this.expression) + "";
     }
 
-    setOperations(operation) {
-        if(this.operations.length === 0 && isNaN(operation) || operation === "=") {
-            return 0;
+    /**
+     * This is the most important method in this class.
+     * Receive a digit which might be a number, ., +, -, *, or / and decide how to store it in the string
+     * variable which hold all the expression so far.
+     * @param {*} userCharacter the digit entered
+     */
+    setDigitInCalculator(userCharacter) {
+        // If the character is a number call the number method
+        if(!isNaN(userCharacter)) {
+        this._setNumber(userCharacter);
         }
-        else if(this.operations.length > 0 && isNaN(operation) || this._isLastCharNotANumber() && operation !== ".") {
-            if(this._isLastCharNotANumber() && isNaN(operation)) {
-                return 0;
-            }
-            else if(operation === "." || this.getLastChar() === ".") {
-                if(this.operator) {
-                    return 0;
-                }
-                this.operations += "" + operation;
-            } else {
-                // It's an operator like +,-,*,/
-                this.operations += " " + operation;
-                this.operator = false;
-            }
+        // If the character is dot then call the dot method
+        else if(userCharacter === ".") {
+        this._setDot(userCharacter);
         }
+        // If the character is a math operator call operator method
         else {
-            if(this.operator) {
-                return 0;
-            }
-            // It's a number
-            this.operations += "" + operation;
+        this._setOperator(userCharacter);
         }
-
     }
 
-    getOperations() {
-        return this.operations;
+    /**
+     * Get the string concatenation so far which hold all the expressions or expression to be computed later
+     * @returns a string containing all the expressions
+     */
+    getResult() {
+        return this.expression;
     }
 
+    /**
+     * Reset the calculator
+     */
     reset() {
-        return this.operations = "";
+        this.isDotCharHasBeenUsedInThisNumber = false;
+        this.isEqualOperatorHasBeenUsed = false;
+        this.expression = "";
     }
 
     _isLastCharNotANumber() {
-        let lastChar = this.operations.charAt(this.operations.length - 1);
+        let lastChar = this.expression.charAt(this.expression.length - 1);
+        if(lastChar === " ") {
+            return true;
+        }
         return isNaN(lastChar);
     }
 
-    getLastChar() {
-        let lastChar = this.operations.charAt(this.operations.length - 1);
+    _getLastChar() {
+        let lastChar = this.expression.charAt(this.expression.length - 1);
         return lastChar;
     }
+
+    deleteCharacter() {
+        if(this._isExpressionEmpty()) {
+            return;
+        } else if (!this._isLastCharNotANumber()) {
+            this.expression = this.expression.substr(0,this.expression.length - 1);
+        } else if(this._getLastChar() === ".") {
+            this.expression = this.expression.substr(0,this.expression.length - 1);
+            this.isDotCharHasBeenUsedInThisNumber = false;
+        } else if(this._isLastCharNotANumber()) {
+            this.expression = this.expression.substr(0,this.expression.length - 3);
+            this.isDotCharHasBeenUsedInThisNumber = !this.isDotCharHasBeenUsedInThisNumber ? true:this.isDotCharHasBeenUsedInThisNumber;
+        }
+    }
+
+    _setNumber(value) {
+        if(this.isEqualOperatorHasBeenUsed) {
+            this.expression = value;
+            this.isEqualOperatorHasBeenUsed = false;
+        }
+        else if(this._isExpressionEmpty() || !this._isLastCharNotANumber() || this._getLastChar() === ".") {
+            this.expression += value;
+        } else if(this._getLastChar() === " ") {
+            this.expression += value;
+        }
+    }
+
+    _isExpressionEmpty() {
+        return this.expression.length === 0;
+    }
+
+    _setDot(value) {
+        if(this.isEqualOperatorHasBeenUsed) {
+            return;
+        } else if(!this._isExpressionEmpty() && !this._isLastCharNotANumber() && !this.isDotCharHasBeenUsedInThisNumber) {
+            this.expression += value;
+            this.isDotCharHasBeenUsedInThisNumber = true;
+        }
+    }
+
+    _setOperator(value) {
+        if (value === "=" && !this._isLastCharNotANumber() && this._getLastChar() !== "." && !this._isExpressionEmpty() &&
+            this._isThereAnOperatorInTheExpression() && !this.isEqualOperatorHasBeenUsed) {
+            this.evaluateMathExpression();
+            this.isDotCharHasBeenUsedInThisNumber = false;
+            this.isEqualOperatorHasBeenUsed = true;
+        } else if(!this._isExpressionEmpty() && !this._isLastCharNotANumber() && this._getLastChar() !== "." && value !== "=") {
+            this.expression += " " + value + " ";
+            this.isDotCharHasBeenUsedInThisNumber = false;
+            this.isEqualOperatorHasBeenUsed = false;
+        } else if(this._isAnOperator(value) && this._getLastChar() !== "." && value !== "=") {
+            // Change the actual operator
+            this.expression = this.expression.substr(0,this.expression.length - 2) + value + " ";
+            this.isEqualOperatorHasBeenUsed = false;
+        }
+    }
+
+    _isAnOperator(value) {
+        if(value === "*" || value === "-" || value === "+" ||
+        value === "/" && value !== ".") {
+            return true;
+        }
+        return false;
+    }
+
+    _isThereAnOperatorInTheExpression() {
+        let operators = ["*","+","-","/"];
+        for(let i = 0, length = operators.length; i < length; i++) {
+            if(this.expression.indexOf(operators[i]) >= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

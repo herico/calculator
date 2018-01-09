@@ -4,10 +4,11 @@
  * @description Building a calculator with Vanilla Javascript from basic to advance
  */
 
-const calculator = new Calculator();
-const ui = new UI();
-let numbers = document.querySelectorAll('.numbers');
-let operators = document.querySelectorAll('.operator')
+const calculator = new Calculator(),
+    ui = new UI(),
+    layerCalculator = document.querySelector(".layer-calculator"),
+    resetButton = document.getElementById("reset"),
+    deleteCharacter = document.getElementById('delete');
 
 // First turn of
 ui.turnOff();
@@ -25,26 +26,32 @@ function loadAllEvents() {
         // Delete all entered operations
         calculator.reset();
         ui.reset();
-        calculator.operator = false;
+    });
+    
+    // Get the digit or character the used has clicked
+    layerCalculator.addEventListener("click",setDigitAndDisplay);
+
+    // The reset button is triggered
+    resetButton.addEventListener('click',() => {
+        calculator.reset();
+        ui.reset();
     });
 
-    // Grab numbers
-    numbers.forEach(number => {
-        if (number.innerText === "=") {
-            number.addEventListener('click', getResult);
-        }
-        number.addEventListener('click', getNumbers);
-    });
+    // Delete a character from the display and the expression
+    deleteCharacter.addEventListener('click',deleteDigit);
 }
 
-function getNumbers(e) {
-    if (ui.status()) {
-        calculator.setOperations(e.target.innerText);
-        ui.render(calculator.getOperations());
+
+function setDigitAndDisplay(e) {
+    let targetElement = e.target;
+    // If the target has a numbers class then proceed to set the operations
+    if(targetElement.classList.contains("numbers")) {
+        calculator.setDigitInCalculator(e.target.innerText);
+        ui.render(calculator.getResult());
     }
 }
 
-function getResult() {
-    calculator.evaluateMathExpression();
-    ui.render(calculator.getOperations());
+function deleteDigit() {
+    calculator.deleteCharacter();
+    ui.render(calculator.getResult());
 }
