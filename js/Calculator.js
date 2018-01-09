@@ -137,7 +137,7 @@ class Calculator {
         }
         else if(this._isExpressionEmpty() || !this._isLastCharNotANumber() || this._getLastChar() === ".") {
             this.expression += value;
-        } else if(this._getLastChar() === " ") {
+        } else if(this._getLastChar() === " " || this._getLastChar() === "-") {
             this.expression += value;
         }
     }
@@ -156,7 +156,13 @@ class Calculator {
     }
 
     _setOperator(value) {
-        if (value === "=" && !this._isLastCharNotANumber() && this._getLastChar() !== "." && !this._isExpressionEmpty() &&
+        if(this._isExpressionEmpty()) {
+            if(value === "-") {
+                this.expression += "" + value;
+                return;
+            }
+        }
+        else if (value === "=" && !this._isLastCharNotANumber() && this._getLastChar() !== "." && !this._isExpressionEmpty() &&
             this._isThereAnOperatorInTheExpression() && !this.isEqualOperatorHasBeenUsed) {
             this.evaluateMathExpression();
             this.isDotCharHasBeenUsedInThisNumber = false;
@@ -165,7 +171,7 @@ class Calculator {
             this.expression += " " + value + " ";
             this.isDotCharHasBeenUsedInThisNumber = false;
             this.isEqualOperatorHasBeenUsed = false;
-        } else if(this._isAnOperator(value) && this._getLastChar() !== "." && value !== "=") {
+        } else if(this._isAnOperator(value) && this._getLastChar() !== "." && value !== "=" && this.expression.length > 1) {
             // Change the actual operator
             this.expression = this.expression.substr(0,this.expression.length - 2) + value + " ";
             this.isEqualOperatorHasBeenUsed = false;
