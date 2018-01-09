@@ -46,7 +46,11 @@ function setDigitAndDisplay(e) {
     let targetElement = e.target;
     // If the target has a numbers class then proceed to set the operations
     if(targetElement.classList.contains("numbers")) {
-        calculator.setDigitInCalculator(e.target.innerText);
+        try {
+            calculator.setDigitInCalculator(e.target.innerText);
+        } catch(e) {
+            ui.showMessage("Check your input format please.","alert alert-danger mb-2 mx-auto text-center col-md-3")
+        }
         ui.render(calculator.getResult());
     }
 }

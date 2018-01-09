@@ -62,7 +62,7 @@ class Calculator {
      * @param {*} expression 
      */
     evaluateMathExpression() {
-       this.expression = eval(this.expression) + "";
+        this.expression = eval(this.expression) + "";
     }
 
     /**
@@ -78,11 +78,11 @@ class Calculator {
         }
         // If the character is dot then call the dot method
         else if(userCharacter === ".") {
-        this._setDot(userCharacter);
+            this._setDot(userCharacter);
         }
         // If the character is a math operator call operator method
         else {
-        this._setOperator(userCharacter);
+            this._setOperator(userCharacter);
         }
     }
 

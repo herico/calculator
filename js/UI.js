@@ -38,4 +38,15 @@ class UI {
             button.disabled = flag;
         })
     }
+
+    showMessage(message, classNames) {
+        const alert = document.createElement("div");
+        alert.classList = classNames;
+        alert.innerText = message;
+        const mainContainer = document.querySelector('.main-container');
+        document.querySelector('body').appendChild(alert);
+        setTimeout(() => {
+            document.querySelector('.alert').remove();
+        },2000);
+    }
 }
