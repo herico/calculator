@@ -46,14 +46,14 @@ class Calculator {
     divide(a, b) {
         return a / b;
     }
-    
+
     /**
      * Make some caculation and return the result value
      * @param {*} a The first number
      * @param {*} operator the operator it can be "+, -, *, /"
      * @param {*} b The second number
      */
-    calculation(a, operator, b ) {
+    calculation(a, operator, b) {
 
     }
 
@@ -73,11 +73,11 @@ class Calculator {
      */
     setDigitInCalculator(userCharacter) {
         // If the character is a number call the number method
-        if(!isNaN(userCharacter)) {
-        this._setNumber(userCharacter);
+        if (!this._isNotANumber(userCharacter)) {
+            this._setNumber(userCharacter);
         }
         // If the character is dot then call the dot method
-        else if(userCharacter === ".") {
+        else if (userCharacter === ".") {
             this._setDot(userCharacter);
         }
         // If the character is a math operator call operator method
@@ -105,10 +105,10 @@ class Calculator {
 
     _isLastCharNotANumber() {
         let lastChar = this.expression.charAt(this.expression.length - 1);
-        if(lastChar === " ") {
+        if (lastChar === " ") {
             return true;
         }
-        return isNaN(lastChar);
+        return this._isNotANumber(lastChar);
     }
 
     _getLastChar() {
@@ -116,30 +116,36 @@ class Calculator {
         return lastChar;
     }
 
+    _isNotANumber(value) {
+        if (typeof value !== "number" && isNaN(value)) {
+            return true;
+        }
+        return false;
+    }
+
     deleteCharacter() {
-        if(this._isExpressionEmpty()) {
+        if (this._isExpressionEmpty()) {
             return;
         } else if (!this._isLastCharNotANumber()) {
-            this.expression = this.expression.substr(0,this.expression.length - 1);
-        } else if(this._getLastChar() === ".") {
-            this.expression = this.expression.substr(0,this.expression.length - 1);
+            this.expression = this.expression.substr(0, this.expression.length - 1);
+        } else if (this._getLastChar() === ".") {
+            this.expression = this.expression.substr(0, this.expression.length - 1);
             this.isDotCharHasBeenUsedInThisNumber = false;
-        } else if(this._isLastCharNotANumber()) {
-            this.expression = this.expression.substr(0,this.expression.length - 3);
-            if(this._isThereADot()) {
-             this.isDotCharHasBeenUsedInThisNumber = !this.isDotCharHasBeenUsedInThisNumber ? true:this.isDotCharHasBeenUsedInThisNumber;
+        } else if (this._isLastCharNotANumber()) {
+            this.expression = this.expression.substr(0, this.expression.length - 3);
+            if (this._isThereADot()) {
+                this.isDotCharHasBeenUsedInThisNumber = !this.isDotCharHasBeenUsedInThisNumber ? true : this.isDotCharHasBeenUsedInThisNumber;
             }
         }
     }
 
     _setNumber(value) {
-        if(this.isEqualOperatorHasBeenUsed) {
+        if (this.isEqualOperatorHasBeenUsed) {
             this.expression = value;
             this.isEqualOperatorHasBeenUsed = false;
-        }
-        else if(this._isExpressionEmpty() || !this._isLastCharNotANumber() || this._getLastChar() === ".") {
+        } else if (this._isExpressionEmpty() || !this._isLastCharNotANumber() || this._getLastChar() === ".") {
             this.expression += value;
-        } else if(this._getLastChar() === " " || this._getLastChar() === "-") {
+        } else if (this._getLastChar() === " " || this._getLastChar() === "-") {
             this.expression += value;
         }
     }
@@ -149,49 +155,48 @@ class Calculator {
     }
 
     _setDot(value) {
-        if(this.isEqualOperatorHasBeenUsed) {
+        if (this.isEqualOperatorHasBeenUsed) {
             return;
-        } else if(!this._isExpressionEmpty() && !this._isLastCharNotANumber() && !this.isDotCharHasBeenUsedInThisNumber) {
+        } else if (!this._isExpressionEmpty() && !this._isLastCharNotANumber() && !this.isDotCharHasBeenUsedInThisNumber) {
             this.expression += value;
             this.isDotCharHasBeenUsedInThisNumber = true;
         }
     }
 
     _setOperator(value) {
-        if(this._isExpressionEmpty()) {
-            if(value === "-") {
+        if (this._isExpressionEmpty()) {
+            if (value === "-") {
                 this.expression += "" + value;
                 return;
             }
-        }
-        else if (value === "=" && !this._isLastCharNotANumber() && this._getLastChar() !== "." && !this._isExpressionEmpty() &&
+        } else if (value === "=" && !this._isLastCharNotANumber() && this._getLastChar() !== "." && !this._isExpressionEmpty() &&
             this._isThereAnOperatorInTheExpression() && !this.isEqualOperatorHasBeenUsed) {
             this.evaluateMathExpression();
             this.isDotCharHasBeenUsedInThisNumber = false;
             this.isEqualOperatorHasBeenUsed = true;
-        } else if(!this._isExpressionEmpty() && !this._isLastCharNotANumber() && this._getLastChar() !== "." && value !== "=") {
+        } else if (!this._isExpressionEmpty() && !this._isLastCharNotANumber() && this._getLastChar() !== "." && value !== "=") {
             this.expression += " " + value + " ";
             this.isDotCharHasBeenUsedInThisNumber = false;
             this.isEqualOperatorHasBeenUsed = false;
-        } else if(this._isAnOperator(value) && this._getLastChar() !== "." && value !== "=" && this.expression.length > 1) {
+        } else if (this._isAnOperator(value) && this._getLastChar() !== "." && value !== "=" && this.expression.length > 1) {
             // Change the actual operator
-            this.expression = this.expression.substr(0,this.expression.length - 2) + value + " ";
+            this.expression = this.expression.substr(0, this.expression.length - 2) + value + " ";
             this.isEqualOperatorHasBeenUsed = false;
         }
     }
 
     _isAnOperator(value) {
-        if(value === "*" || value === "-" || value === "+" ||
-        value === "/" && value !== ".") {
+        if (value === "*" || value === "-" || value === "+" ||
+            value === "/" && value !== ".") {
             return true;
         }
         return false;
     }
 
     _isThereAnOperatorInTheExpression() {
-        let operators = ["*","+","-","/"];
-        for(let i = 0, length = operators.length; i < length; i++) {
-            if(this.expression.indexOf(operators[i]) >= 0) {
+        let operators = ["*", "+", "-", "/"];
+        for (let i = 0, length = operators.length; i < length; i++) {
+            if (this.expression.indexOf(operators[i]) >= 0) {
                 return true;
             }
         }
@@ -199,7 +204,7 @@ class Calculator {
     }
 
     _isThereADot() {
-        return (this.expression.indexOf(".") >= 0) ? true:false;
+        return (this.expression.indexOf(".") >= 0) ? true : false;
     }
 
 }
